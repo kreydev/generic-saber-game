@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using UnityEngine.Timeline;
 using UnityEngine;
 
-
-namespace kreydev
+[Serializable] public enum BlockDir
 {
-    [Serializable] public enum BlockDir
-    {
-        XX,
-        TL, TT, TR,
-        LL, MM, RR,
-        BL, BB, BR
-    };
+    TL, TT, TR,
+    LL,     RR,
+    BL, BB, BR
+};
 
-    [Serializable] public class BDRow
+[Serializable] public struct Block
+{
+    public BlockDir dir;
+    public Vector2 coord;
+    public override string ToString()
     {
-        [SerializeField] public List<BlockDir> Row;
-    }    
+        return $"[{coord.x}, {coord.y} {dir}]";
+    }
 }

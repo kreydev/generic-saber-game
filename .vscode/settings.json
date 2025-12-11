@@ -67,5 +67,8 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "generic-saber-game.slnx"
+    "dotnet.defaultSolution": "generic-saber-game.slnx",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "/home/jamz/Documents/Coding/generic-saber-game/generic-saber-game.slnx"
+    ]
 }
