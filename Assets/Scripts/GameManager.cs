@@ -2,16 +2,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+   AudioClip[] missSFX;
+   AudioClip[] bombSFX;
+   AudioClip[] sliceSFX;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   void Start()
+   {
+      missSFX = Resources.LoadAll<AudioClip>("SFX/miss");
+      bombSFX = Resources.LoadAll<AudioClip>("SFX/bomb");
+      sliceSFX = Resources.LoadAll<AudioClip>("SFX/slice");
+   }
 }
 
