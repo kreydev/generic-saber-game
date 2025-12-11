@@ -1,23 +1,22 @@
 global string level;
-global Event LevelStarted;
-global float freqs[16];
-16 => int FFT_SIZE;
+global float freqs[512];
+512 => int FFT_SIZE;
 
-SndBuf buffer => FFT fft => blackhole; // FFT analysis chain
-buffer => dac; // Audio output chain
+global Event LevelDone;
+
+SndBuf buffer => FFT fft => blackhole;
+buffer => dac;
 
 FFT_SIZE => fft.size;
 Windowing.hann(FFT_SIZE) => fft.window;
 
-while(true) {
-    LevelStarted => now;
-    
-    "/Resources/" + level + "/song.mp3" => buffer.read;
-    <<< "/Resources/" + level + "/song.mp3" >>>;
-    0 => buffer.pos;
-    
-    // Advance time to allow FFT to analyze
-    FFT_SIZE::samp => now;
+level + ".wav" => buffer.read;
+0 => buffer.pos;
+
+// Analyze continuously while playing
+while(buffer.pos() < buffer.samples()) {
+    // Advance time by hop size
+    (FFT_SIZE/2)::samp => now;
     
     // Get FFT data
     fft.upchuck();
@@ -27,7 +26,6 @@ while(true) {
         fft.cval(i) $ polar @=> polar p;
         p.mag => freqs[i];
     }
-    
-    // Continue playing the rest of the file
-    buffer.length() - (FFT_SIZE::samp) => now;
 }
+
+LevelDone.broadcast();

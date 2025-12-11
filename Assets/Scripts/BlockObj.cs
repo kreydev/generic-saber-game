@@ -6,7 +6,7 @@ public class BlockObj : MonoBehaviour
    {
       coord = block.coord;
       dir = block.dir;
-      hand = block.hand;
+      type = block.type;
 
       switch (dir)
       {
@@ -48,6 +48,6 @@ public class BlockObj : MonoBehaviour
 
    public BlockDir dir;
    public Vector2 coord;
-   public Hand hand;
+   public ObjType type;
 
 }
