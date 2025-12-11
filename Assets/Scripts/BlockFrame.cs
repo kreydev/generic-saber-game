@@ -4,13 +4,11 @@ using System;
 
 [Serializable] public class BlockFrame : SignalEmitter
 {
-    public BlockFrame(Block[] _blocks, float _bpm)
+    public BlockFrame(Block[] _blocks)
     {
         blocks = _blocks;
-        bpm = _bpm;
-        Debug.Log($"Spawning new BlockFrame with BPM {bpm} and blocks {blocks}.");
+        Debug.Log($"Spawning new BlockFrame with blocks {blocks}.");
     }
 
     public Block[] blocks;
-    public float bpm;
 }

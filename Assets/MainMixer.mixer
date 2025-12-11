@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!243 &-340899774386819658
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ChucK
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 853206d8993b27c2397a43d6966c7010
+  m_Children: []
+  m_Volume: 2ff51fd8eabd6a4369ce06cfd394b63c
+  m_Pitch: d609264c4e85b16cdae12ed3d0a9954a
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 8963481747182488185}
+  - {fileID: 8232362562817684092}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!241 &24100000
+AudioMixerController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MainMixer
+  m_OutputGroup: {fileID: 0}
+  m_MasterGroup: {fileID: 24300002}
+  m_Snapshots:
+  - {fileID: 24500006}
+  m_StartSnapshot: {fileID: 24500006}
+  m_SuspendThreshold: -80
+  m_EnableSuspend: 1
+  m_UpdateMode: 0
+  m_ExposedParameters:
+  - guid: 44328ed1d5678d50d952cf3485ddd2cd
+    name: LevelMusic
+  m_AudioMixerGroupViews:
+  - guids:
+    - 37a2da277289dc21c80b0d3b4eec3c75
+    - 853206d8993b27c2397a43d6966c7010
+    name: View
+  m_CurrentViewIndex: 0
+  m_TargetSnapshot: {fileID: 24500006}
+--- !u!243 &24300002
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Master
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 37a2da277289dc21c80b0d3b4eec3c75
+  m_Children:
+  - {fileID: -340899774386819658}
+  m_Volume: dd8862c4edd2452388da4340407f9cd4
+  m_Pitch: 00ef1d539bf1876a39eb187003812f50
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 24400004}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &24400004
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 077c96fb3f28a89d7bec1f3d12f77564
+  m_EffectName: Attenuation
+  m_MixLevel: cd264f7bbc3f4ea36940f3767a1dc6a9
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!245 &24500006
+AudioMixerSnapshotController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Snapshot
+  m_AudioMixer: {fileID: 24100000}
+  m_SnapshotID: 4b2aa9e87026df39a9bdd7c0b12d060f
+  m_FloatValues:
+    44328ed1d5678d50d952cf3485ddd2cd: -1
+  m_TransitionOverrides: {}
+--- !u!244 &8232362562817684092
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 72c26b7883d6cecf390be7d30a345a44
+  m_EffectName: ChucK
+  m_MixLevel: 70884427adeae5dea816c65248e9abb4
+  m_Parameters:
+  - m_ParameterName: ChucK ID
+    m_GUID: 44328ed1d5678d50d952cf3485ddd2cd
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &8963481747182488185
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 3179864720d38a86c8556954106277d2
+  m_EffectName: Attenuation
+  m_MixLevel: 3bcf79d1e229ef4388d9533c18ce6e75
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
