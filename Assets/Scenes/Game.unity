@@ -577,7 +577,6 @@ MonoBehaviour:
   rotThresh: 16
   cubee: {fileID: 1035350258255280228, guid: c3897ae0af8ad670aaa259b721951cc5, type: 3}
   visHolder: {fileID: 1726544834}
-  isQuitting: 0
 --- !u!1 &380890285
 GameObject:
   m_ObjectHideFlags: 0
@@ -2796,7 +2795,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1169716429
 Transform:
   m_ObjectHideFlags: 0
@@ -2806,7 +2805,7 @@ Transform:
   m_GameObject: {fileID: 1169716428}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 3.5, z: 14}
+  m_LocalPosition: {x: -4.5, y: 12, z: 14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4481,7 +4480,7 @@ SceneRoots:
   - {fileID: 1034242486}
   - {fileID: 1169716429}
   - {fileID: 1726544834}
-  - {fileID: 1206734004}
-  - {fileID: 807441707}
   - {fileID: 2043832913}
   - {fileID: 1002199220}
+  - {fileID: 1206734004}
+  - {fileID: 807441707}
