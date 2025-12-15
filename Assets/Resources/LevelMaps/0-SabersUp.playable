@@ -28,12 +28,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15c55020fb1676e281642a5fdc42ab6, type: 3}
   m_Name: Block Frame
   m_EditorClassIdentifier: Assembly-CSharp::BlockFrame
-  m_Time: 0
+  m_Time: 0.26666666666666666
   m_Retroactive: 0
-  m_EmitOnce: 0
+  m_EmitOnce: 1
   m_Asset: {fileID: 11400000, guid: 86d5ce13d6fd8bad2ac12aefc79674b3, type: 2}
-  blocks: []
-  bpm: 0
+  blocks:
+  - dir: 0
+    coord: {x: 0, y: 0}
+    type: 0
+  - dir: 7
+    coord: {x: 3, y: 2}
+    type: 1
 --- !u!114 &-1395207873894705189
 MonoBehaviour:
   m_ObjectHideFlags: 1

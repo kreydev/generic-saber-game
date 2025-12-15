@@ -44,6 +44,27 @@ public class BlockObj : MonoBehaviour
          
          default: break;
       }
+
+      switch (type)
+      {
+         case ObjType.Left:
+            Instantiate(Resources.Load("Models/Cube"), transform);
+            break;
+
+         case ObjType.Right:
+            Instantiate(Resources.Load("Models/Cube"), transform);
+            break;
+
+         case ObjType.Bomb:
+            Instantiate(Resources.Load("Models/Bomb"), transform);
+            break;
+
+         case ObjType.Wall:
+            Instantiate(Resources.Load("Models/Wall"), transform);
+            break;
+
+         default: break;
+      }
    }
 
    public BlockDir dir;

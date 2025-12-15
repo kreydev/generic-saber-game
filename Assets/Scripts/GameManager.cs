@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 using UnityEditor;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using Unity.VisualScripting;
 
 public enum SFX {miss, bomb, slice}
 
-public class GameManager : MonoBehaviour
+public class GameManager : SignalReceiver, INotificationReceiver
 {
    AudioClip[] missSFX;
    AudioClip[] bombSFX;
@@ -23,6 +26,7 @@ public class GameManager : MonoBehaviour
    public GameObject cubee;
    public Transform visHolder;
    readonly static Queue<Action> executionQueue = new();
+   public float latency;
 
    void Start()
    {
@@ -52,20 +56,9 @@ public class GameManager : MonoBehaviour
       Chuck.Manager.Initialize(mixer, "LevelMusic");
       Chuck.Manager.RunFile("LevelMusic", "LevelMusic.ck");
       Chuck.Manager.SetString("LevelMusic", "level", Application.streamingAssetsPath + "/" + LevelName);
-      Chuck.Manager.StartListeningForChuckEvent("LevelMusic", "LevelDone", () => { QueueQuit(); });
+      Chuck.Manager.StartListeningForChuckEvent("LevelMusic", "LevelDone", () => {  });
 
       freqCB = (values, num) => { Freqs = values; };
-   }
-
-   [ContextMenu("Queue quit action")]
-   void QueueQuit()
-   {
-      print("Queuing quit...");
-      #if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
-      #else
-         Application.Quit();
-      #endif
    }
 
    public void Update()
@@ -107,6 +100,11 @@ public class GameManager : MonoBehaviour
          }
       }
 
+   }
+
+   public new void OnNotify(Playable playable, INotification notification, object obj)
+   {
+      print(((BlockFrame)notification).blocks.ToCommaSeparatedString());
    }
 
    public static void Enqueue(Action action)
