@@ -19,7 +19,6 @@ level + ".wav" => buffer.read;
 <<< "loaded level WAV" >>>;
 // Analyze continuously while playing
 while(buffer.pos() < buffer.samples()) {
-    <<< "Chuck heartbeat", now >>>;
     // Advance time by hop size
     (FFT_SIZE/2)::samp => now;
     

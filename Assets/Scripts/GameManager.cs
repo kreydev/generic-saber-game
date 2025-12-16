@@ -66,8 +66,6 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
       freqCB = (values, num) => { Freqs = values; };
 
-      Chuck.SetLogLevel(Chuck.LogLevel.Config);
-
       Chuck.Manager.Kill();
       
       Chuck.Manager.Initialize(mixer, "LevelMusic");
