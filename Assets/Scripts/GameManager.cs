@@ -34,7 +34,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
    public static GameManager Singleton {get { return FindFirstObjectByType<GameManager>(); }}
    PlayableDirector director;
    public bool hideEditMode;
-   
+      
    void Start()
    {
       Application.targetFrameRate = 1000;
@@ -66,12 +66,14 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
       freqCB = (values, num) => { Freqs = values; };
 
-      Chuck.SetLogLevel(Chuck.LogLevel.Fine);
+      Chuck.SetLogLevel(Chuck.LogLevel.Config);
 
+      Chuck.Manager.Kill();
+      
       Chuck.Manager.Initialize(mixer, "LevelMusic");
-      Thread.Sleep(1500);
 
       Chuck.Manager.RunFile("LevelMusic", "LevelMusic.ck");
+
       Chuck.Manager.SetString("LevelMusic", "level", Application.streamingAssetsPath + "/" + LevelName);
 
       director = GetComponent<PlayableDirector>();
@@ -83,7 +85,10 @@ public class GameManager : SignalReceiver, INotificationReceiver
    IEnumerator PlayChuck()
    {
       yield return new WaitForSeconds(latency);
-      Chuck.Manager.BroadcastEvent("LevelMusic", "LevelStart");
+      while (!Chuck.Manager.BroadcastEvent("LevelMusic", "LevelStart"))
+      {
+         yield return new WaitForFixedUpdate();         
+      }
    }
 
    public void Update()

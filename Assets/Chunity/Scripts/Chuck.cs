@@ -37,7 +37,7 @@ public class Chuck
         }
     }
 
-    public void Initialize( AudioMixer mixer, string name )
+    public bool Initialize( AudioMixer mixer, string name )
     {
         // only initialize if haven't initialized yet
         if( !ids.ContainsKey( name ) )
@@ -53,7 +53,7 @@ public class Chuck
                 // never *actually* returns false and so this error message will not be seen.
                 // instead, will see "Assertion failed on expression: 'res == FMOD_OK'
                 Debug.Log( "ChucK ID C++ storage failed for " + name );
-                return;
+                return false;
             }
             else
             {
@@ -65,11 +65,26 @@ public class Chuck
             ids.Add( name, _nextValidID );
             Debug.Log( "ChucK instance " + name + " has been initialized!" );
             _nextValidID++;
+            return true;
         }
         else
         {
             Debug.Log( "ChucK instance " + name + " has already been initialized." );
+            return false;
         }
+    }
+
+    public void Kill()
+    {
+        foreach (var name in ids.Keys)
+        {
+            cleanupChuckInstance(ids[name]);
+        }
+        ids = new();
+        cleanRegisteredChucks();
+
+        __sharedInstance = new Chuck();
+        GC.Collect();
     }
 
     public System.UInt32 InitializeFilter()
@@ -1508,7 +1523,7 @@ public class Chuck
     // TODO: actually implement named-gets in iOS and WebGL
 
     [DllImport( PLUGIN_NAME )]
-    private static extern void cleanRegisteredChucks();
+    public static extern void cleanRegisteredChucks();
 
     [DllImport( PLUGIN_NAME )]
     private static extern bool initChuckInstance( System.UInt32 chuckID, System.UInt32 sampleRate );

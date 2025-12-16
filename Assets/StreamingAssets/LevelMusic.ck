@@ -12,15 +12,14 @@ FFT_SIZE => fft.size;
 Windowing.hann(FFT_SIZE) => fft.window;
 
 LevelStart => now;
-<<< "Got level start event" >>>;
 
 level + ".wav" => buffer.read;
 0 => buffer.pos;
 
-
 <<< "loaded level WAV" >>>;
 // Analyze continuously while playing
 while(buffer.pos() < buffer.samples()) {
+    <<< "Chuck heartbeat", now >>>;
     // Advance time by hop size
     (FFT_SIZE/2)::samp => now;
     
