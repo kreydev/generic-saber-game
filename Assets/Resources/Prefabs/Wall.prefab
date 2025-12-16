@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8398093319920073256}
   - component: {fileID: 5715601499451754842}
   - component: {fileID: 7543736797423661154}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Box Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5248439014194955281}
   - component: {fileID: 6801337635561534579}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Audio Reverb Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,14 +113,14 @@ AudioReverbZone:
   m_Enabled: 1
   m_MinDistance: 2
   m_MaxDistance: 2
-  m_ReverbPreset: 1
+  m_ReverbPreset: 23
   m_Room: -1000
-  m_RoomHF: -100
+  m_RoomHF: -4000
   m_DecayTime: 1.49
-  m_DecayHFRatio: 0.83
-  m_Reflections: -2602
+  m_DecayHFRatio: 0.1
+  m_Reflections: -449
   m_ReflectionsDelay: 0.007
-  m_Reverb: 200
+  m_Reverb: 1700
   m_ReverbDelay: 0.011
   m_HFReference: 5000
   m_Diffusion: 100
@@ -138,9 +138,10 @@ GameObject:
   - component: {fileID: 8186554263222579877}
   - component: {fileID: 7929454003074568923}
   - component: {fileID: 8526100933800679549}
-  m_Layer: 0
+  - component: {fileID: 3462115891259092362}
+  m_Layer: 3
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -221,6 +222,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3462115891259092362
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112945661228015162}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3264905710848547382
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +254,7 @@ GameObject:
   - component: {fileID: 3653425932524846740}
   - component: {fileID: 4538600495679598809}
   - component: {fileID: 2082178952835669231}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +344,7 @@ GameObject:
   - component: {fileID: 5137248859569352173}
   - component: {fileID: 640249518616879}
   - component: {fileID: 3111447269534466627}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

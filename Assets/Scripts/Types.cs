@@ -21,8 +21,8 @@ using UnityEngine;
     public BlockDir dir;
     public Vector2 coord;
     public ObjType type;
-    public override string ToString()
+    public readonly override string ToString()
     {
-        return $"[{coord.x}, {coord.y} {dir}]";
+        return $"[{( (type == ObjType.Left || type == ObjType.Right) ? $"{dir} " : "" )}{type} @ {coord.x}, {coord.y}]";
     }
 }

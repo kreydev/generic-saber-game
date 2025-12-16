@@ -6,11 +6,15 @@ TagManager:
   tags:
   - Lsaber
   - Rsaber
+  - TopCol
+  - BottomCol
+  - Bomb
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - CubeObj
   - Water
   - UI
   - 

@@ -2,6 +2,7 @@ global string level;
 global float freqs[512];
 512 => int FFT_SIZE;
 
+global Event LevelStart;
 global Event LevelDone;
 
 SndBuf buffer => FFT fft => blackhole;
@@ -10,9 +11,14 @@ buffer => dac;
 FFT_SIZE => fft.size;
 Windowing.hann(FFT_SIZE) => fft.window;
 
+LevelStart => now;
+<<< "Got level start event" >>>;
+
 level + ".wav" => buffer.read;
 0 => buffer.pos;
 
+
+<<< "loaded level WAV" >>>;
 // Analyze continuously while playing
 while(buffer.pos() < buffer.samples()) {
     // Advance time by hop size
