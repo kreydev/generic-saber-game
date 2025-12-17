@@ -3,11 +3,8 @@ using UnityEngine.Audio;
 using System.Collections.Generic;
 using System.Collections;
 using System;
-using UnityEditor;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using Unity.VisualScripting;
-using System.Threading;
 
 public enum SFX {miss, bomb, slice}
 
@@ -66,12 +63,10 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
       freqCB = (values, num) => { Freqs = values; };
 
+      Chuck.SetLogLevel(Chuck.LogLevel.System);
       Chuck.Manager.Kill();
-      
       Chuck.Manager.Initialize(mixer, "LevelMusic");
-
       Chuck.Manager.RunFile("LevelMusic", "LevelMusic.ck");
-
       Chuck.Manager.SetString("LevelMusic", "level", Application.streamingAssetsPath + "/" + LevelName);
 
       director = GetComponent<PlayableDirector>();
@@ -139,8 +134,6 @@ public class GameManager : SignalReceiver, INotificationReceiver
             GameObject g = new();
             BlockObj b = g.AddComponent<BlockObj>();
             b.SetData(block, blockHolder);
-
-            // print(b);
          }
       } else
       {
@@ -150,19 +143,17 @@ public class GameManager : SignalReceiver, INotificationReceiver
             GameObject g = new();
             BlockObj b = g.AddComponent<BlockObj>();
             b.SetData(block, editBlockHolder);
-
-            // print(b);
          }
       }
    }
 
    public static void Enqueue(Action action)
-    {
-      lock (executionQueue)
-      {
-         executionQueue.Enqueue(action);
-      }
-    }
+   {
+   lock (executionQueue)
+   {
+      executionQueue.Enqueue(action);
+   }
+   }
 
    void OnApplicationQuit()
    {
