@@ -10,6 +10,8 @@ public class CameraManager : MonoBehaviour
     readonly Mat mat = new();
     [SerializeField] RawImage canvasimage;
 
+    public static CameraManager Singleton {get {return FindFirstObjectByType<CameraManager>();}}
+
     Texture2D webcamTexture;
 
     void Awake()
@@ -37,18 +39,77 @@ public class CameraManager : MonoBehaviour
         newThread.Start();
     }
 
+    readonly object facePosLock = new();
+    [SerializeField] Vector2 facePosition = Vector2.zero;
+    public Vector2 FacePos {get {return facePosition;}}
+
     void CamThread()
     {
+        // try to load a Haar cascade from Assets; place "haarcascade_frontalface_default.xml" in your Assets folder
+        string cascadePath = System.IO.Path.Combine(Application.dataPath, "haarcascade_frontalface_default.xml");
+        CascadeClassifier faceCascade = null;
+        try
+        {
+            if (System.IO.File.Exists(cascadePath)) faceCascade = new CascadeClassifier(cascadePath);
+            else Debug.LogWarning($"Cascade not found at {cascadePath}. Face tracking disabled.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"Failed to load cascade: {ex.Message}");
+            faceCascade = null;
+        }
+
         while (true)
         {
             if (facecam == null || !facecam.IsOpened()) break;
 
-            var frame = new Mat();
-            facecam.Read(frame);
-            if (frame.Empty()) break;
+            using (var frame = new Mat())
+            {
+                facecam.Read(frame);
+                if (frame.Empty()) break;
 
-            lock (mat) { Cv2.CvtColor(frame, mat, ColorConversionCodes.BGR2RGBA); }
+                // convert and copy to shared mat
+                using (var rgba = new Mat())
+                {
+                    Cv2.CvtColor(frame, rgba, ColorConversionCodes.BGR2RGBA);
+                    lock (mat) { rgba.CopyTo(mat); }
+                }
+
+                // face detection + update facePosition (normalized 0..1, Y flipped to Unity space)
+                if (faceCascade != null)
+                {
+                    using (var gray = new Mat())
+                    {
+                        Cv2.CvtColor(frame, gray, ColorConversionCodes.BGR2GRAY);
+                        var faces = faceCascade.DetectMultiScale(gray, 1.1, 3);
+                        if (faces != null && faces.Length > 0)
+                        {
+                            // pick largest face
+                            OpenCvSharp.Rect best = faces[0];
+                            int bestArea = best.Width * best.Height;
+                            for (int i = 1; i < faces.Length; i++)
+                            {
+                                int area = faces[i].Width * faces[i].Height;
+                                if (area > bestArea) { best = faces[i]; bestArea = area; }
+                            }
+                            float cx = best.X + best.Width * 0.5f;
+                            float cy = best.Y + best.Height * 0.5f;
+                            float nx = cx / frame.Width;
+                            float ny = cy / frame.Height;
+                            var newPos = new Vector2(0.5f - nx, 0.5f - ny);
+
+                            lock (facePosLock) { facePosition = newPos; }
+                        }
+                        else
+                        {
+                            lock (facePosLock) { facePosition = Vector2.zero; }
+                        }
+                    }
+                }
+            }
         }
+
+        faceCascade?.Dispose();
     }
 
     void FixedUpdate()
