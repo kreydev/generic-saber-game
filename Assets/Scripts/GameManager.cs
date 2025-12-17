@@ -63,7 +63,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
       freqCB = (values, num) => { Freqs = values; };
 
-      Chuck.SetLogLevel(Chuck.LogLevel.System);
+      Chuck.SetLogLevel(Chuck.LogLevel.Core);
       Chuck.Manager.Kill();
       Chuck.Manager.Initialize(mixer, "LevelMusic");
       Chuck.Manager.RunFile("LevelMusic", "LevelMusic.ck");
@@ -149,10 +149,10 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
    public static void Enqueue(Action action)
    {
-   lock (executionQueue)
-   {
-      executionQueue.Enqueue(action);
-   }
+      lock (executionQueue)
+      {
+         executionQueue.Enqueue(action);
+      }
    }
 
    void OnApplicationQuit()
