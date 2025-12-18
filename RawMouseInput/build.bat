@@ -1,0 +1,1 @@
+clang++ -shared -o ../Assets/Plugins/RawMouseInput/RawMouseInput.dll RawMouseInput.cpp -luser32 -lgdi32 -static

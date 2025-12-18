@@ -1,19 +1,22 @@
-using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BlockObj : MonoBehaviour
 {
    GameManager gm;
    float speed = 0;
+   bool touched;
    public void SetData(Block block, Transform parent)
    {
       gm = GameManager.Singleton;
       speed = gm.scrollSpeed * 60f / gm.BPM;
       transform.parent = parent;
+      rb = gameObject.AddComponent<Rigidbody>();;
 
       coord = block.coord;
       dir = block.dir;
       type = block.type;
+      rb.useGravity = false;
 
       if (type == ObjType.Left || type == ObjType.Right)
       {
@@ -82,13 +85,27 @@ public class BlockObj : MonoBehaviour
    public BlockDir dir;
    public Vector2 coord;
    public ObjType type;
+   Rigidbody rb;
 
    void Update()
    {
-      transform.localPosition += Vector3.back * speed * Time.deltaTime;
+      if (!touched) { transform.localPosition += Vector3.back * speed * Time.deltaTime; }
    }
+
    public override string ToString()
    {
       return $"*[{( (type == ObjType.Left || type == ObjType.Right) ? $"{dir} " : "" )}{type} @ {coord.x}, {coord.y} (v={speed})]";
+   }
+
+   void OnCollisionEnter(Collision other)
+   {
+      if (type != ObjType.Wall)
+      {
+         rb.linearVelocity = Vector3.zero;
+         rb.AddExplosionForce(100, other.GetContact(0).point - Vector3.back, 1, .3f, ForceMode.VelocityChange);
+      }
+      if (type == ObjType.Bomb) gm.PlaySound(SFX.bomb, transform);
+      else if ((type == ObjType.Left && other.gameObject.CompareTag("LSaber")) || (type == ObjType.Right && other.gameObject.CompareTag("RSaber"))) gm.PlaySound(SFX.slice, transform);
+      else if ((type == ObjType.Right && other.gameObject.CompareTag("LSaber")) || (type == ObjType.Left && other.gameObject.CompareTag("RSaber"))) gm.PlaySound(SFX.miss, transform);
    }
 }

@@ -14,6 +14,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
    AudioClip[] bombSFX;
    AudioClip[] sliceSFX;
    public AudioMixer mixer;
+   public AudioMixerSnapshot[] snaps = new AudioMixerSnapshot[2];
    public float rotThresh;
    public float BPM {get; private set;} = 135;
    public float scrollSpeed;
@@ -34,6 +35,10 @@ public class GameManager : SignalReceiver, INotificationReceiver
       
    void Start()
    {
+      Cursor.lockState = CursorLockMode.Locked;
+      Cursor.visible = false;
+      snaps[0] = mixer.FindSnapshot("Main");
+      snaps[1] = mixer.FindSnapshot("InWall");
       Application.targetFrameRate = 1000;
 
       editBlockHolder.gameObject.SetActive(!hideEditMode);
@@ -165,7 +170,9 @@ public class GameManager : SignalReceiver, INotificationReceiver
       int index = UnityEngine.Random.Range(0, 3);
       float pitch = UnityEngine.Random.Range(-.2f, .2f);
       AudioSource aud = Instantiate(new AudioSource(), pos);
+      aud.outputAudioMixerGroup = mixer.FindMatchingGroups("sfx")[0];
       aud.pitch += pitch;
+      print($"playing {sfx}{index} @ {pitch}");
       switch (sfx)
       {
          case SFX.miss:
