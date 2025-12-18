@@ -111,11 +111,11 @@ public class RawMouseInput : MonoBehaviour
       {
          try
          {
-               Shutdown();
+            Shutdown();
          }
          catch (Exception e)
          {
-               Debug.LogError($"Exception during shutdown: {e.Message}");
+            Debug.LogError($"Exception during shutdown: {e.Message}");
          }
       }
    }
