@@ -787,7 +787,7 @@ MonoBehaviour:
   blockHolder: {fileID: 867817722}
   editBlockHolder: {fileID: 1169716429}
   latency: 2.3
-  hideEditMode: 0
+  hideEditMode: 1
 --- !u!320 &351399950
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2158,6 +2158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922d47153eb974c48beecc8205f1fb5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RawMouseInput
+  debugMode: 0
 --- !u!4 &699551156
 Transform:
   m_ObjectHideFlags: 0
@@ -5543,7 +5544,7 @@ MonoBehaviour:
   movScalars: {x: 0.06, y: 0.034}
   saberOffset:
   - {x: 2.75, y: 2.5, z: 0}
-  - {x: -2.75, y: 2.5, z: 0}
+  - {x: -6, y: 2.5, z: 0}
 --- !u!1 &2144219205
 GameObject:
   m_ObjectHideFlags: 0

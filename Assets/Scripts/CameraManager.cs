@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using OpenCvSharp;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Unity.VisualScripting;
 
 public class CameraManager : MonoBehaviour
 {
@@ -80,6 +81,7 @@ public class CameraManager : MonoBehaviour
                using (var rgba = new Mat())
                {
                   Cv2.CvtColor(frame, rgba, ColorConversionCodes.BGR2RGBA);
+                  if (mat == null) break;
                   lock (mat) { rgba.CopyTo(mat); }
                }
 

@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BlockObj : MonoBehaviour
@@ -6,6 +5,7 @@ public class BlockObj : MonoBehaviour
    GameManager gm;
    float speed = 0;
    bool touched;
+   Rigidbody rb;
    public void SetData(Block block, Transform parent)
    {
       gm = GameManager.Singleton;
@@ -74,6 +74,7 @@ public class BlockObj : MonoBehaviour
 
          case ObjType.Wall:
             Instantiate(Resources.Load("Prefabs/Wall"), transform);
+            rb.isKinematic = true;
             break;
 
          default: break;
@@ -85,11 +86,11 @@ public class BlockObj : MonoBehaviour
    public BlockDir dir;
    public Vector2 coord;
    public ObjType type;
-   Rigidbody rb;
 
    void Update()
    {
       if (!touched) { transform.localPosition += Vector3.back * speed * Time.deltaTime; }
+      if (transform.position.z < -20) Destroy(gameObject);
    }
 
    public override string ToString()
@@ -101,11 +102,19 @@ public class BlockObj : MonoBehaviour
    {
       if (type != ObjType.Wall)
       {
-         rb.linearVelocity = Vector3.zero;
-         rb.AddExplosionForce(100, other.GetContact(0).point - Vector3.back, 1, .3f, ForceMode.VelocityChange);
+         if (type == ObjType.Bomb)
+         {
+            gm.PlaySound(SFX.bomb, transform);
+            GetComponentInChildren<ParticleSystem>().Play();
+         }
+         else if ((type == ObjType.Left && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Right && other.gameObject.CompareTag("Rsaber"))) gm.PlaySound(SFX.slice, transform);
+         else if ((type == ObjType.Right && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Left && other.gameObject.CompareTag("Rsaber"))) gm.PlaySound(SFX.miss, transform);
+         foreach (var c in GetComponentsInChildren<Collider>())
+         {
+            c.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50, other.GetContact(0).point, 1, .1f, ForceMode.Impulse );
+         }
+         Destroy(rb);
+         touched = true;
       }
-      if (type == ObjType.Bomb) gm.PlaySound(SFX.bomb, transform);
-      else if ((type == ObjType.Left && other.gameObject.CompareTag("LSaber")) || (type == ObjType.Right && other.gameObject.CompareTag("RSaber"))) gm.PlaySound(SFX.slice, transform);
-      else if ((type == ObjType.Right && other.gameObject.CompareTag("LSaber")) || (type == ObjType.Left && other.gameObject.CompareTag("RSaber"))) gm.PlaySound(SFX.miss, transform);
    }
 }

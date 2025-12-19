@@ -40,6 +40,7 @@ public class RawMouseInput : MonoBehaviour
    private static extern void ResetDeltas();
 
    private bool isInitialized = false;
+   public bool debugMode;
 
    void Start()
    {
@@ -48,12 +49,12 @@ public class RawMouseInput : MonoBehaviour
          int result = Initialize();
          if (result == 1)
          {
-               isInitialized = true;
-               Debug.Log("Raw Input initialized successfully!");
+            isInitialized = true;
+            if (debugMode) Debug.Log("Raw Input initialized successfully!");
          }
          else
          {
-               Debug.LogError($"Failed to initialize Raw Input! Result: {result}");
+            Debug.LogError($"Failed to initialize Raw Input! Result: {result}");
          }
       }
       catch (Exception e)
@@ -73,22 +74,38 @@ public class RawMouseInput : MonoBehaviour
          UpdatePlugin();
 
          int mouseCount = GetMouseCount();
-         
+
+         // normalize negative counts
+         if (mouseCount < 0) mouseCount = 0;
+
+         // Ensure the mice list matches the reported mouse count
+         if (mice.Count < mouseCount)
+         {
+               int toAdd = mouseCount - mice.Count;
+               for (int j = 0; j < toAdd; j++)
+               {
+                  mice.Add(new MouseData());
+               }
+         }
+         else if (mice.Count > mouseCount)
+         {
+               mice.RemoveRange(mouseCount, mice.Count - mouseCount);
+         }
+
          if (mouseCount > 0 && mouseCount != lastMouseCount)
          {
-               Debug.Log($"Detected {mouseCount} mice!");
+               if (debugMode) Debug.Log($"Detected {mouseCount} mice!");
                lastMouseCount = mouseCount;
-               mice.Add(new MouseData());
          }
 
          for (int i = 0; i < mouseCount; i++)
          {
-               MouseData data = new MouseData();
+               MouseData data = default;
                if (GetMouseData(i, ref data, Marshal.SizeOf(typeof(MouseData))) == 1)
                {
                   if (data.deltaX != 0 || data.deltaY != 0 || data.leftButton != 0 || data.rightButton != 0)
                   {
-                     Debug.Log($"Mouse {i + 1}: Position({data.x}, {data.y}) Delta({data.deltaX}, {data.deltaY}) " +
+                     if (debugMode) Debug.Log($"Mouse {i + 1}: Position({data.x}, {data.y}) Delta({data.deltaX}, {data.deltaY}) " +
                                  $"Left:{data.leftButton} Right:{data.rightButton} Middle:{data.middleButton}");
                   }
                }

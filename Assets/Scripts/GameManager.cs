@@ -35,7 +35,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
       
    void Start()
    {
-      Cursor.lockState = CursorLockMode.Locked;
+      Cursor.lockState = CursorLockMode.Confined;
       Cursor.visible = false;
       snaps[0] = mixer.FindSnapshot("Main");
       snaps[1] = mixer.FindSnapshot("InWall");
@@ -168,10 +168,13 @@ public class GameManager : SignalReceiver, INotificationReceiver
    public void PlaySound(SFX sfx, Transform pos)
    {
       int index = UnityEngine.Random.Range(0, 3);
-      float pitch = UnityEngine.Random.Range(-.2f, .2f);
-      AudioSource aud = Instantiate(new AudioSource(), pos);
+      float pitch = UnityEngine.Random.Range(-.1f, .1f);
+      AudioSource aud = Instantiate(new GameObject(), (pos != null) ? pos : transform).AddComponent<AudioSource>();
       aud.outputAudioMixerGroup = mixer.FindMatchingGroups("sfx")[0];
       aud.pitch += pitch;
+      aud.spatialize = true;
+      aud.spatialBlend = .5f;
+      aud.dopplerLevel = .3f;
       print($"playing {sfx}{index} @ {pitch}");
       switch (sfx)
       {
