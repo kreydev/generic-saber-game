@@ -162,7 +162,7 @@ public class CameraManager : MonoBehaviour
       if (webcamTexture != null) Destroy(webcamTexture);
    }
 
-   void OnCollisionEnter(Collision other)
+   void OnTriggerEnter(Collider other)
    {
       if (other.gameObject.CompareTag("Wall"))
       {
@@ -172,7 +172,7 @@ public class CameraManager : MonoBehaviour
       }
    }
 
-   void OnCollisionExit(Collision other)
+   void OnTriggerExit(Collider other)
    {
       if (other.gameObject.CompareTag("Wall"))
       {
