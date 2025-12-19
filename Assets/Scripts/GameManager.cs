@@ -5,6 +5,8 @@ using System.Collections;
 using System;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using TMPro;
+using System.Threading.Tasks;
 
 public enum SFX {miss, bomb, slice}
 
@@ -32,6 +34,13 @@ public class GameManager : SignalReceiver, INotificationReceiver
    public static GameManager Singleton {get { return FindFirstObjectByType<GameManager>(); }}
    PlayableDirector director;
    public bool hideEditMode;
+
+   public int combo;
+   public int score;
+   public TMP_Text comboText;
+   public TMP_Text scoreText;
+
+
       
    void Start()
    {
@@ -165,6 +174,12 @@ public class GameManager : SignalReceiver, INotificationReceiver
       Chuck.Manager.Quit();
    }
 
+   IEnumerator KillSound(AudioSource audio)
+   {
+      yield return new WaitForSeconds(5);
+      Destroy(audio.gameObject);
+   }
+
    public void PlaySound(SFX sfx, Transform pos)
    {
       int index = UnityEngine.Random.Range(0, 3);
@@ -189,5 +204,6 @@ public class GameManager : SignalReceiver, INotificationReceiver
             break;
          default: break;
       }
+      StartCoroutine(KillSound(aud));
    }
 }
