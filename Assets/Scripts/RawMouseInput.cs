@@ -108,6 +108,60 @@ public class RawMouseInput : MonoBehaviour
       }
    }
 
+   // Handle focus/pause so native plugin can be reinitialized after alt-tab or window switch.
+   void OnApplicationFocus(bool hasFocus)
+   {
+      if (hasFocus)
+      {
+         try
+         {
+            if (!isInitialized)
+            {
+               int result = Initialize();
+               if (result == 1)
+               {
+                  isInitialized = true;
+                  if (debugMode) Debug.Log("Raw Input reinitialized on focus.");
+               }
+               else
+               {
+                  Debug.LogError($"Failed to initialize Raw Input on focus! Result: {result}");
+               }
+            }
+            // Always reset deltas when regaining focus to avoid stuck movement
+            ResetDeltas();
+         }
+         catch (Exception e)
+         {
+            Debug.LogError($"Exception during focus handling (gain): {e.Message}");
+            isInitialized = false;
+         }
+      }
+      else
+      {
+         // Best-effort shutdown to let the plugin release any platform resources while unfocused
+         try
+         {
+            if (isInitialized)
+            {
+               Shutdown();
+               isInitialized = false;
+               if (debugMode) Debug.Log("Raw Input shutdown on focus loss.");
+            }
+         }
+         catch (Exception e)
+         {
+            Debug.LogError($"Exception during focus handling (loss): {e.Message}");
+         }
+      }
+   }
+
+   void OnApplicationPause(bool paused)
+   {
+      // mirror focus behaviour for mobile/other pause scenarios
+      OnApplicationFocus(!paused);
+   }
+
    public static List<MouseData> mice = new();
 
    void Update()

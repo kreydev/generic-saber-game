@@ -37,6 +37,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
    public int combo;
    public int score;
    public int maxCombo;
+   public int totalNotes;
    public TMP_Text comboText;
    public TMP_Text scoreText;
 
@@ -154,6 +155,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
             GameObject g = new();
             BlockObj b = g.AddComponent<BlockObj>();
             b.SetData(block, blockHolder);
+            if (block.type == ObjType.Left || block.type == ObjType.Right) totalNotes++;
          }
       } else
       {
