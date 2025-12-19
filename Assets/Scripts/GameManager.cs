@@ -196,7 +196,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
       aud.spatialize = true;
       aud.spatialBlend = .5f;
       aud.dopplerLevel = .3f;
-      print($"playing {sfx}{index} @ {pitch}");
+      // print($"playing {sfx}{index} @ {pitch}");
       switch (sfx)
       {
          case SFX.miss:

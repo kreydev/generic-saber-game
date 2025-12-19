@@ -41,6 +41,7 @@ public class RawMouseInput : MonoBehaviour
 
    private bool isInitialized = false;
    public bool debugMode;
+   public static bool swapped;
 
 
    public static RawMouseInput Singleton {get; private set;}
@@ -117,6 +118,7 @@ public class RawMouseInput : MonoBehaviour
                }
                mice[i] = data;
          }
+         if (swapped) mice.Reverse();
          ResetDeltas();
       }
       catch (Exception e)

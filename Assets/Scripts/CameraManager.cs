@@ -151,7 +151,7 @@ public class CameraManager : MonoBehaviour
          webcamTexture.LoadRawTextureData(raw2);
          webcamTexture.Apply(false);
       }
-      gm.mixer.TransitionToSnapshots(gm.snaps, weights, 0.05f);
+      try {gm.mixer.TransitionToSnapshots(gm.snaps, weights, 0.05f);} catch {}
    }
 
    void OnDisable()
