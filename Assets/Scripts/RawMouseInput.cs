@@ -22,23 +22,33 @@ public class RawMouseInput : MonoBehaviour
       public int middleButton;
    }
 
-   [DllImport("RawMouseInput")]
-   private static extern int Initialize();
-
-   [DllImport("RawMouseInput", EntryPoint = "Update")]
-   private static extern void UpdatePlugin();
-
-   [DllImport("RawMouseInput")]
-   private static extern int GetMouseCount();
-
-   [DllImport("RawMouseInput")]
-   private static extern int GetMouseData(int index, ref MouseData outData, int dataSize);
-
-   [DllImport("RawMouseInput")]
-   private static extern void Shutdown();
-
-   [DllImport("RawMouseInput")]
-   private static extern void ResetDeltas();
+   #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+      [DllImport("RawMouseInput", CallingConvention = CallingConvention.Cdecl)]
+      private static extern int Initialize();
+   
+      [DllImport("RawMouseInput", EntryPoint = "Update", CallingConvention = CallingConvention.Cdecl)]
+      private static extern void UpdatePlugin();
+   
+      [DllImport("RawMouseInput", CallingConvention = CallingConvention.Cdecl)]
+      private static extern int GetMouseCount();
+   
+      [DllImport("RawMouseInput", CallingConvention = CallingConvention.Cdecl)]
+      private static extern int GetMouseData(int index, ref MouseData outData, int dataSize);
+   
+      [DllImport("RawMouseInput", CallingConvention = CallingConvention.Cdecl)]
+      private static extern void Shutdown();
+   
+      [DllImport("RawMouseInput", CallingConvention = CallingConvention.Cdecl)]
+      private static extern void ResetDeltas();
+   #else
+      // Stubs for platforms that don't include the native plugin to avoid DllNotFoundException in player builds
+      private static int Initialize() { return 0; }
+      private static void UpdatePlugin() { }
+      private static int GetMouseCount() { return 0; }
+      private static int GetMouseData(int index, ref MouseData outData, int dataSize) { return 0; }
+      private static void Shutdown() { }
+      private static void ResetDeltas() { }
+   #endif
 
    private bool isInitialized = false;
    public bool debugMode;
@@ -162,7 +172,7 @@ public class RawMouseInput : MonoBehaviour
       OnApplicationFocus(!paused);
    }
 
-   public static List<MouseData> mice = new();
+   public static List<MouseData> mice = new List<MouseData>();
 
    void Update()
    {

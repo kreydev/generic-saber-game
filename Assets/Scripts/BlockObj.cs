@@ -91,7 +91,10 @@ public class BlockObj : MonoBehaviour
    void Update()
    {
       if (!touched) { transform.localPosition += Vector3.back * speed * Time.deltaTime; }
-      if (transform.position.z < -20) Destroy(gameObject);
+      if (transform.position.z < -20) {
+         if (type == ObjType.Left || type == ObjType.Right) gm.combo = 0;
+         Destroy(gameObject);
+      }
    }
 
    public override string ToString()

@@ -6,6 +6,7 @@ using System;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum SFX {miss, bomb, slice}
 
@@ -50,6 +51,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
       snaps[0] = mixer.FindSnapshot("Main");
       snaps[1] = mixer.FindSnapshot("InWall");
       Application.targetFrameRate = 1000;
+      DontDestroyOnLoad(gameObject);
 
       editBlockHolder.gameObject.SetActive(!hideEditMode);
       foreach (var objj in editBlockHolder.GetComponentsInChildren<BlockObj>()) { DestroyImmediate(objj.gameObject); }
@@ -103,6 +105,14 @@ public class GameManager : SignalReceiver, INotificationReceiver
    {
       scoreText.text = score.ToString();
       comboText.text = combo.ToString();
+
+      if (director.state == PlayState.Paused) StartCoroutine(GotoEnd());
+   }
+
+   IEnumerator GotoEnd()
+   {
+      yield return new WaitForSeconds(latency + 2);
+      SceneManager.LoadScene("2_EndScreen");
    }
 
    public void Update()
