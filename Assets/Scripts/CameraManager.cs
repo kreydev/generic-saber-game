@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using OpenCvSharp;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Unity.VisualScripting;
 
 public class CameraManager : MonoBehaviour
 {
@@ -169,6 +168,14 @@ public class CameraManager : MonoBehaviour
          print("walled");
          weights[0] = 0f;
          weights[1] = 1f;
+      }
+   }
+
+   void OnTriggerStay(Collider other)
+   {
+      if (other.gameObject.CompareTag("Wall"))
+      {
+         gm.combo = 0;
       }
    }
 

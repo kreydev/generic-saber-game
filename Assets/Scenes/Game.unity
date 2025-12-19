@@ -788,6 +788,10 @@ MonoBehaviour:
   editBlockHolder: {fileID: 1169716429}
   latency: 2.3
   hideEditMode: 1
+  combo: 0
+  score: 0
+  comboText: {fileID: 646515331}
+  scoreText: {fileID: 380890286}
 --- !u!320 &351399950
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -3784,6 +3788,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1303137251}
   m_CullTransparentMesh: 1
+--- !u!1 &1337583061 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
+  m_PrefabInstance: {fileID: 1396123295}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1339862093
 GameObject:
   m_ObjectHideFlags: 0
@@ -3888,6 +3897,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1927496492}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1927496493}
     - targetCorrespondingSourceObject: {fileID: 8513859187771203891, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 650958619}
@@ -4001,6 +4016,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1396123297}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1396123298}
     - targetCorrespondingSourceObject: {fileID: 8513859187771203891, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 354751179}
@@ -4010,6 +4031,45 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
   m_PrefabInstance: {fileID: 1396123295}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1396123297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337583061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa74a31acd947974da9008482859b491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaberObj
+--- !u!54 &1396123298
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337583061}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &1515517647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4559,6 +4619,50 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -462981019419857548, guid: abdf8d6bb39bb9a299c34492bf1d5a1f, type: 3}
+--- !u!1 &1927496491 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e00f4cf574df8293f8db091f2aa26e8f, type: 3}
+  m_PrefabInstance: {fileID: 1376705160}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1927496492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927496491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa74a31acd947974da9008482859b491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaberObj
+--- !u!54 &1927496493
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927496491}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1959717175
 GameObject:
   m_ObjectHideFlags: 0

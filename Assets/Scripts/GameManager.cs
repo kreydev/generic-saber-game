@@ -6,7 +6,6 @@ using System;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using TMPro;
-using System.Threading.Tasks;
 
 public enum SFX {miss, bomb, slice}
 
@@ -37,6 +36,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
    public int combo;
    public int score;
+   public int maxCombo;
    public TMP_Text comboText;
    public TMP_Text scoreText;
 
@@ -96,6 +96,12 @@ public class GameManager : SignalReceiver, INotificationReceiver
       {
          yield return new WaitForFixedUpdate();         
       }
+   }
+
+   void FixedUpdate()
+   {
+      scoreText.text = score.ToString();
+      comboText.text = combo.ToString();
    }
 
    public void Update()
@@ -174,10 +180,10 @@ public class GameManager : SignalReceiver, INotificationReceiver
       Chuck.Manager.Quit();
    }
 
-   IEnumerator KillSound(AudioSource audio)
+   public IEnumerator KillCB(GameObject obj)
    {
       yield return new WaitForSeconds(5);
-      Destroy(audio.gameObject);
+      Destroy(obj.gameObject);
    }
 
    public void PlaySound(SFX sfx, Transform pos)
@@ -204,6 +210,6 @@ public class GameManager : SignalReceiver, INotificationReceiver
             break;
          default: break;
       }
-      StartCoroutine(KillSound(aud));
+      StartCoroutine(KillCB(aud.gameObject));
    }
 }

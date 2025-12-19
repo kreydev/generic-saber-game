@@ -104,17 +104,38 @@ public class BlockObj : MonoBehaviour
       {
          if (type == ObjType.Bomb)
          {
+            gm.score -= 5;
+            gm.combo = 0;
             gm.PlaySound(SFX.bomb, transform);
             GetComponentInChildren<ParticleSystem>().Play();
+            StartCoroutine(gm.KillCB(gameObject));
          }
-         else if ((type == ObjType.Left && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Right && other.gameObject.CompareTag("Rsaber"))) gm.PlaySound(SFX.slice, transform);
-         else if ((type == ObjType.Right && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Left && other.gameObject.CompareTag("Rsaber"))) gm.PlaySound(SFX.miss, transform);
-         foreach (var c in GetComponentsInChildren<Collider>())
+         else if (other.gameObject.CompareTag("Lsaber") || other.gameObject.CompareTag("Rsaber"))
          {
-            c.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50, other.GetContact(0).point, 1, .1f, ForceMode.Impulse );
+            SaberObj saber = other.gameObject.GetComponentInParent<SaberObj>();
+            if ((type == ObjType.Left && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Right && other.gameObject.CompareTag("Rsaber")))
+            // if (saber.state == HitState.Good)
+            {
+               saber.state = HitState.Pre;
+               gm.PlaySound(SFX.slice, transform); 
+            }
+            else if ((type == ObjType.Right && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Left && other.gameObject.CompareTag("Rsaber")))
+            // else if (saber.state == HitState.Bad)
+            {
+               gm.combo = 0;
+               saber.state = HitState.Pre;
+               gm.PlaySound(SFX.miss, transform);
+            }
+            foreach (var c in GetComponentsInChildren<Collider>())
+            {
+               if (c.gameObject.GetComponent<Rigidbody>() == null)
+                  c.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50, other.GetContact(0).point, 1, .1f, ForceMode.Impulse );
+               else
+                  c.gameObject.GetComponent<Rigidbody>().AddExplosionForce(50, other.GetContact(0).point, 1, .1f, ForceMode.Impulse );
+            }
+            Destroy(rb);
+            touched = true;
          }
-         Destroy(rb);
-         touched = true;
       }
    }
 }
