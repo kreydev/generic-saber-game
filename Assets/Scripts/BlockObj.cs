@@ -6,6 +6,7 @@ public class BlockObj : MonoBehaviour
    float speed = 0;
    bool touched;
    Rigidbody rb;
+   public bool triggered;
    public void SetData(Block block, Transform parent)
    {
       gm = GameManager.Singleton;

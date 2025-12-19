@@ -42,8 +42,14 @@ public class RawMouseInput : MonoBehaviour
    private bool isInitialized = false;
    public bool debugMode;
 
+
+   public static RawMouseInput Singleton {get; private set;}
+
    void Start()
    {
+      if (Singleton != null) Destroy(gameObject);
+      else Singleton = this;
+      DontDestroyOnLoad(gameObject);
       try
       {
          int result = Initialize();

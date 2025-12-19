@@ -790,6 +790,7 @@ MonoBehaviour:
   hideEditMode: 1
   combo: 0
   score: 0
+  maxCombo: 0
   comboText: {fileID: 646515331}
   scoreText: {fileID: 380890286}
 --- !u!320 &351399950
@@ -4043,6 +4044,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa74a31acd947974da9008482859b491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaberObj
+  state: 0
+  saber: 0
 --- !u!54 &1396123298
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4636,6 +4639,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa74a31acd947974da9008482859b491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaberObj
+  state: 0
+  saber: 1
 --- !u!54 &1927496493
 Rigidbody:
   m_ObjectHideFlags: 0
