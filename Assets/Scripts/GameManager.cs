@@ -103,6 +103,8 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
    void FixedUpdate()
    {
+      if (SceneManager.GetActiveScene().buildIndex != 1) Destroy(gameObject);
+      
       scoreText.text = score.ToString();
       comboText.text = combo.ToString();
 
