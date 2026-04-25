@@ -3,11 +3,10 @@ using UnityEngine.Audio;
 using System.Collections.Generic;
 using System.Collections;
 using System;
-using UnityEditor;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using Unity.VisualScripting;
-using System.Threading;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum SFX {miss, bomb, slice}
 
@@ -17,6 +16,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
    AudioClip[] bombSFX;
    AudioClip[] sliceSFX;
    public AudioMixer mixer;
+   public AudioMixerSnapshot[] snaps = new AudioMixerSnapshot[2];
    public float rotThresh;
    public float BPM {get; private set;} = 135;
    public float scrollSpeed;
@@ -34,10 +34,24 @@ public class GameManager : SignalReceiver, INotificationReceiver
    public static GameManager Singleton {get { return FindFirstObjectByType<GameManager>(); }}
    PlayableDirector director;
    public bool hideEditMode;
+
+   public int combo;
+   public int score;
+   public int maxCombo;
+   public int totalNotes;
+   public TMP_Text comboText;
+   public TMP_Text scoreText;
+
+
       
    void Start()
    {
+      Cursor.lockState = CursorLockMode.Confined;
+      Cursor.visible = false;
+      snaps[0] = mixer.FindSnapshot("Main");
+      snaps[1] = mixer.FindSnapshot("InWall");
       Application.targetFrameRate = 1000;
+      DontDestroyOnLoad(gameObject);
 
       editBlockHolder.gameObject.SetActive(!hideEditMode);
       foreach (var objj in editBlockHolder.GetComponentsInChildren<BlockObj>()) { DestroyImmediate(objj.gameObject); }
@@ -66,12 +80,10 @@ public class GameManager : SignalReceiver, INotificationReceiver
 
       freqCB = (values, num) => { Freqs = values; };
 
+      Chuck.SetLogLevel(Chuck.LogLevel.Core);
       Chuck.Manager.Kill();
-      
       Chuck.Manager.Initialize(mixer, "LevelMusic");
-
       Chuck.Manager.RunFile("LevelMusic", "LevelMusic.ck");
-
       Chuck.Manager.SetString("LevelMusic", "level", Application.streamingAssetsPath + "/" + LevelName);
 
       director = GetComponent<PlayableDirector>();
@@ -87,6 +99,22 @@ public class GameManager : SignalReceiver, INotificationReceiver
       {
          yield return new WaitForFixedUpdate();         
       }
+   }
+
+   void FixedUpdate()
+   {
+      if (SceneManager.GetActiveScene().buildIndex != 1) Destroy(gameObject);
+      
+      scoreText.text = score.ToString();
+      comboText.text = combo.ToString();
+
+      if (director.state == PlayState.Paused) StartCoroutine(GotoEnd());
+   }
+
+   IEnumerator GotoEnd()
+   {
+      yield return new WaitForSeconds(latency + 2);
+      SceneManager.LoadScene("2_EndScreen");
    }
 
    public void Update()
@@ -139,8 +167,7 @@ public class GameManager : SignalReceiver, INotificationReceiver
             GameObject g = new();
             BlockObj b = g.AddComponent<BlockObj>();
             b.SetData(block, blockHolder);
-
-            // print(b);
+            if (block.type == ObjType.Left || block.type == ObjType.Right) totalNotes++;
          }
       } else
       {
@@ -150,31 +177,40 @@ public class GameManager : SignalReceiver, INotificationReceiver
             GameObject g = new();
             BlockObj b = g.AddComponent<BlockObj>();
             b.SetData(block, editBlockHolder);
-
-            // print(b);
          }
       }
    }
 
    public static void Enqueue(Action action)
-    {
+   {
       lock (executionQueue)
       {
          executionQueue.Enqueue(action);
       }
-    }
+   }
 
    void OnApplicationQuit()
    {
       Chuck.Manager.Quit();
    }
 
+   public IEnumerator KillCB(GameObject obj)
+   {
+      yield return new WaitForSeconds(5);
+      Destroy(obj.gameObject);
+   }
+
    public void PlaySound(SFX sfx, Transform pos)
    {
       int index = UnityEngine.Random.Range(0, 3);
-      float pitch = UnityEngine.Random.Range(-.2f, .2f);
-      AudioSource aud = Instantiate(new AudioSource(), pos);
+      float pitch = UnityEngine.Random.Range(-.1f, .1f);
+      AudioSource aud = Instantiate(new GameObject(), (pos != null) ? pos : transform).AddComponent<AudioSource>();
+      aud.outputAudioMixerGroup = mixer.FindMatchingGroups("sfx")[0];
       aud.pitch += pitch;
+      aud.spatialize = true;
+      aud.spatialBlend = .5f;
+      aud.dopplerLevel = .3f;
+      // print($"playing {sfx}{index} @ {pitch}");
       switch (sfx)
       {
          case SFX.miss:
@@ -188,5 +224,6 @@ public class GameManager : SignalReceiver, INotificationReceiver
             break;
          default: break;
       }
+      StartCoroutine(KillCB(aud.gameObject));
    }
 }

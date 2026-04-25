@@ -1,19 +1,23 @@
-using System.Diagnostics;
 using UnityEngine;
 
 public class BlockObj : MonoBehaviour
 {
    GameManager gm;
    float speed = 0;
+   bool touched;
+   Rigidbody rb;
+   public bool triggered;
    public void SetData(Block block, Transform parent)
    {
       gm = GameManager.Singleton;
       speed = gm.scrollSpeed * 60f / gm.BPM;
       transform.parent = parent;
+      rb = gameObject.AddComponent<Rigidbody>();;
 
       coord = block.coord;
       dir = block.dir;
       type = block.type;
+      rb.useGravity = false;
 
       if (type == ObjType.Left || type == ObjType.Right)
       {
@@ -71,6 +75,7 @@ public class BlockObj : MonoBehaviour
 
          case ObjType.Wall:
             Instantiate(Resources.Load("Prefabs/Wall"), transform);
+            rb.isKinematic = true;
             break;
 
          default: break;
@@ -85,10 +90,56 @@ public class BlockObj : MonoBehaviour
 
    void Update()
    {
-      transform.localPosition += Vector3.back * speed * Time.deltaTime;
+      if (!touched) { transform.localPosition += Vector3.back * speed * Time.deltaTime; }
+      if (transform.position.z < -20) {
+         if (type == ObjType.Left || type == ObjType.Right) gm.combo = 0;
+         Destroy(gameObject);
+      }
    }
+
    public override string ToString()
    {
       return $"*[{( (type == ObjType.Left || type == ObjType.Right) ? $"{dir} " : "" )}{type} @ {coord.x}, {coord.y} (v={speed})]";
+   }
+
+   void OnCollisionEnter(Collision other)
+   {
+      if (type != ObjType.Wall)
+      {
+         if (type == ObjType.Bomb)
+         {
+            gm.score -= 5;
+            gm.combo = 0;
+            gm.PlaySound(SFX.bomb, transform);
+            GetComponentInChildren<ParticleSystem>().Play();
+            StartCoroutine(gm.KillCB(gameObject));
+         }
+         else if (other.gameObject.CompareTag("Lsaber") || other.gameObject.CompareTag("Rsaber"))
+         {
+            SaberObj saber = other.gameObject.GetComponentInParent<SaberObj>();
+            if ((type == ObjType.Left && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Right && other.gameObject.CompareTag("Rsaber")))
+            // if (saber.state == HitState.Good)
+            {
+               saber.state = HitState.Pre;
+               gm.PlaySound(SFX.slice, transform); 
+            }
+            else if ((type == ObjType.Right && other.gameObject.CompareTag("Lsaber")) || (type == ObjType.Left && other.gameObject.CompareTag("Rsaber")))
+            // else if (saber.state == HitState.Bad)
+            {
+               gm.combo = 0;
+               saber.state = HitState.Pre;
+               gm.PlaySound(SFX.miss, transform);
+            }
+            foreach (var c in GetComponentsInChildren<Collider>())
+            {
+               if (c.gameObject.GetComponent<Rigidbody>() == null)
+                  c.gameObject.AddComponent<Rigidbody>().AddExplosionForce(50, other.GetContact(0).point, 1, .1f, ForceMode.Impulse );
+               else
+                  c.gameObject.GetComponent<Rigidbody>().AddExplosionForce(50, other.GetContact(0).point, 1, .1f, ForceMode.Impulse );
+            }
+            Destroy(rb);
+            touched = true;
+         }
+      }
    }
 }
